@@ -2,12 +2,15 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core'
 import variables from 'styles/variables'
 import ListAltIcon from '@material-ui/icons/ListAlt';
-export default () => {
+interface IProps {
+    icon: JSX.Element
+}
+export default (props:IProps) => {
     const classes = useStyles()
     return (
         <button className={classes.footerNavIconWrapper}>
             <div className={classes.buttonWrapper}>
-                <ListAltIcon />
+                {props.icon}
             </div>
         </button>
     )
@@ -39,7 +42,7 @@ const useStyles = makeStyles(theme => ({
         },
         flex: '1',
         height: '100%',
-        backgroundColor: 'blue',
+        backgroundColor: variables.color.primary,
         color: 'white',
         textDecoration: 'none',
         border: 'none',

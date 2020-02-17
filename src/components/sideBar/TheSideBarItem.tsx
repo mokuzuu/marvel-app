@@ -2,16 +2,18 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core'
 import variables from 'styles/variables'
 interface IProps {
+    title: string,
+    icon: JSX.Element
 }
 export default (props: IProps) => {
     const classes = useStyles()
     return (
         <li className={classes.sideBarMenuItem}>
             <div>
-
+                {props.icon}
             </div>
             <div>
-
+                {props.title}
             </div>
         </li>
     )
@@ -19,17 +21,17 @@ export default (props: IProps) => {
 
 const useStyles = makeStyles(theme => ({
     sideBarMenuItem: {
-        display: 'block',
+        display: 'flex',
         '& a': {
             diaplay: 'flex',
             flexDirection: 'row',
             padding: '84px',
             fontWeight: '200',
             fontSize: variables.fontSize.default,
-            color: 'blue',
+            color: variables.color.primary,
             textDecoration: 'none',
             '& hover': {
-                color: 'blue',
+                color: variables.color.primary,
                 backgroundColor: '#ececee'
             },
             '& i': {

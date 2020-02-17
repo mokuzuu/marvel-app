@@ -1,5 +1,8 @@
 const $spaceUnit = 0.8 // rem
 export default {
+    color: {
+        primary: 'red'
+    },
     app: {
         height: 'calc(100vh - 0px)',
         marginTop: '0px'
@@ -9,6 +12,9 @@ export default {
         height: '52px',
         color: 'black',
         bgColor: 'white'
+    },
+    footer: {
+        height: '50px'
     },
     zIndex: {
         dialog: 9999,

@@ -2,12 +2,17 @@ import React from 'react'
 import SideBarItem from './TheSideBarItem'
 import { makeStyles } from '@material-ui/core'
 import variables from 'styles/variables'
-export default () => {
+interface IProps {
+    navs: {title: string, icon: JSX.Element}[]
+}
+export default (props:IProps) => {
     const classes = useStyles()
     return (
         <div className={classes.sideBarGroup}>
             <ul>
-                <SideBarItem />
+                {props.navs.map((nav, idx) => (
+                    <SideBarItem title={nav.title} icon={nav.icon} key={idx}/>
+                ))}
             </ul>
         </div>
     )
@@ -17,9 +22,9 @@ const useStyles = makeStyles(theme => ({
     sideBarGroup: {
         display: 'flex',
         justifyContent: 'center',
-        margin: `0 0 ${variables.space['48']} 0`,
         '& ul': {
-            padding: '0'
+            padding: '0',
+            color: 'white'
         },
         '& strong': {
             display: 'block',

@@ -1,0 +1,109 @@
+import React from "react";
+import List from "components/abstracts/list/BaseList";
+import { getCharacters } from "apis/characters";
+import {
+  Route,
+  useRouteMatch,
+  Switch,
+  RouteComponentProps,
+  withRouter
+} from "react-router-dom";
+import { makeStyles } from "@material-ui/core";
+import { useTabletHook } from "hooks/isTablet";
+import HeroDetail from "./HeroDetail";
+
+interface IProps extends RouteComponentProps<{ id: string }> {
+  history: any;
+}
+export interface Character {
+  name?: string;
+  description?: string;
+  thumbnail?: string;
+  comics?: {
+    resourceURI: string;
+    name: string;
+  }[];
+  series?: {
+    resourceURI: string;
+    name: string;
+  }[];
+  stories?: {
+    resourceURI: string;
+    name: string;
+  }[];
+}
+export default withRouter((props: IProps) => {
+  const amount = 20;
+  const [characters, setCharacters] = React.useState<any[]>([]);
+
+  const classes = useStyles();
+  const isTablet = useTabletHook();
+  const { path, url } = useRouteMatch();
+  const fetch = (offset: number) => {
+    return getCharacters(offset).then(res => {
+      const { data } = res;
+      setCharacters(prevState => [
+        ...prevState,
+        ...data.results.map(
+          (val: {
+            id: string;
+            name: string;
+            description: string;
+            thumbnail: {
+              path: string;
+              extension: string;
+            };
+          }) => ({
+            to: `${url}/${val.id}`,
+            id: val.id,
+            name: val.name,
+            description: val.description,
+            thumbnail: `${val.thumbnail.path}/portrait_small.${val.thumbnail.extension}`
+          })
+        )
+      ]);
+      return res;
+    });
+  };
+
+  return (
+    <div className={classes.container}>
+      <div className={classes.listWrapper}>
+        <List items={characters} fetch={fetch} />
+      </div>
+      {!isTablet && (
+        <div className={classes.detailWrapper}>
+          <Switch>
+            <Route path={`${path}/:id`}>
+              <HeroDetail />
+            </Route>
+          </Switch>
+        </div>
+      )}
+    </div>
+  );
+});
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    width: "100%",
+    height: "100%",
+    display: "flex"
+  },
+  listWrapper: {
+    flex: "1",
+    [theme.breakpoints.up("sm")]: {
+      borderRight: "0.5px solid grey"
+    }
+  },
+  detailWrapper: {
+    flex: "1.5"
+  },
+  progressWrapper: {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  }
+}));
