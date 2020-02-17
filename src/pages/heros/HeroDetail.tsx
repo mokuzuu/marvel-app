@@ -17,6 +17,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import variables from "styles/variables";
 import { getCharacterById } from "apis/characters";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { useTabletHook } from "hooks/isTablet";
 
 interface IProps {}
 const useStyles = makeStyles(theme => ({
@@ -25,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up("xs")]: {
       height:
         (
-          document.body.clientHeight -
+          document.documentElement.clientHeight -
           parseInt(variables.footer.height, 10) -
           parseInt(variables.header.height, 10)
         ).toString() + "px"
@@ -33,7 +34,8 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up("sm")]: {
       height:
         (
-          document.body.clientHeight - parseInt(variables.header.height, 10)
+          document.documentElement.clientHeight -
+          parseInt(variables.header.height, 10)
         ).toString() + "px"
     },
     overflow: "scroll",
@@ -53,6 +55,7 @@ export default (props: IProps) => {
     null
   );
   const [isDetailLoading, setDetailLoadingStatus] = React.useState(false);
+  const isTablet = useTabletHook();
   React.useEffect(() => {
     if (id) {
       setDetailLoadingStatus(true);
@@ -75,27 +78,47 @@ export default (props: IProps) => {
         .catch(err => console.error(err));
     }
   }, [id]);
-
+  console.log(isDetailLoading);
   return (
     <Container className={classes.root}>
-      {selectedCharacter !== null &&
-        (isDetailLoading ? (
-          <CircularProgress color="secondary" />
-        ) : (
+      {isDetailLoading ? (
+        <CircularProgress color="secondary" />
+      ) : (
+        selectedCharacter !== null && (
           <Grid container spacing={3}>
-            <Grid item xs={6}>
-              <Typography variant="h5">{selectedCharacter.name}</Typography>
-              <Typography variant="subtitle1">
-                {selectedCharacter.description}
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <img
-                src={selectedCharacter.thumbnail}
-                width="300"
-                height="300px"
-              />
-            </Grid>
+            {isTablet ? (
+              <React.Fragment>
+                <Grid item xs={12}>
+                  <Typography variant="h5">{selectedCharacter.name}</Typography>
+                  <Typography variant="subtitle1">
+                    {selectedCharacter.description}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <img
+                    src={selectedCharacter.thumbnail}
+                    width="300"
+                    height="300px"
+                  />
+                </Grid>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <Grid item xs={6}>
+                  <Typography variant="h5">{selectedCharacter.name}</Typography>
+                  <Typography variant="subtitle1">
+                    {selectedCharacter.description}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <img
+                    src={selectedCharacter.thumbnail}
+                    width="100%"
+                    height="auto"
+                  />
+                </Grid>
+              </React.Fragment>
+            )}
             <Grid item xs={12}>
               <ExpansionPanel>
                 <ExpansionPanelSummary
@@ -156,7 +179,8 @@ export default (props: IProps) => {
               </ExpansionPanel>
             </Grid>
           </Grid>
-        ))}
+        )
+      )}
     </Container>
   );
 };

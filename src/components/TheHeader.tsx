@@ -6,27 +6,46 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import { useLocation } from "react-router-dom";
 import { rootPages } from "App";
 import { withRouter } from "react-router";
+import { connect } from "react-redux";
+
+const mapStateToProps = (state: any /*, ownProps*/) => {
+  console.log(state);
+  return {
+    routeName: state.app.routeName
+  };
+};
 interface IProps {
   history: any;
+  routeName?: string;
 }
-export default withRouter((props: IProps) => {
-  const classes = useStyles();
-  const isTablet = useTabletHook();
-  const location = useLocation();
-  return (
-    <header className={classes.header}>
-      {isTablet && (
-        <div className={classes.mobileHeader}>
-          {!rootPages.includes(location.pathname) && (
-            <div className={classes.backButtonWrapper}>
-              <ArrowBackIosIcon onClick={props.history.goBack()} />
-            </div>
-          )}
-        </div>
-      )}
-    </header>
-  );
-});
+export default connect(
+  mapStateToProps,
+  null
+)(
+  withRouter((props: IProps) => {
+    const classes = useStyles();
+    const isTablet = useTabletHook();
+    const location = useLocation();
+
+    return (
+      <header className={classes.header}>
+        {isTablet ? (
+          <div className={classes.mobileHeader}>
+            {rootPages.includes(location.pathname) ? (
+              <div className={classes.desktopHeader}>{props.routeName}</div>
+            ) : (
+              <div className={classes.backButtonWrapper}>
+                <ArrowBackIosIcon onClick={props.history.goBack} />
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className={classes.desktopHeader}>{props.routeName}</div>
+        )}
+      </header>
+    );
+  })
+);
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -61,5 +80,13 @@ const useStyles = makeStyles(theme => ({
     justifyContent: "center",
     alignItems: "center",
     paddingLeft: "8px"
+  },
+  desktopHeader: {
+    position: "relative",
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    marginLeft: "10px"
   }
 }));
