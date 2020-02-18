@@ -7,13 +7,14 @@ import Footer from "components/footer/TheFooter";
 import { makeStyles } from "@material-ui/core";
 import variables from "styles/variables";
 import ListAltIcon from "@material-ui/icons/ListAlt";
-
+import { routes } from "routes";
 interface IProps {
   children: JSX.Element;
 }
 const navIcons = [
   {
     title: "List",
+    to: routes.characters,
     icon: <ListAltIcon />
   }
 ];

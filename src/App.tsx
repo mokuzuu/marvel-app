@@ -6,10 +6,7 @@ import { useTabletHook } from "hooks/isTablet";
 import HeroDetail from "pages/heros/HeroDetail";
 import store from "store/index";
 import { Provider } from "react-redux";
-const routes = {
-  characters: "/characters",
-  charactereById: "/characters/:id"
-};
+import { routes } from "routes";
 export const rootPages = [routes.characters];
 const App = () => {
   const isTablet = useTabletHook();

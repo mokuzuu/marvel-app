@@ -3,14 +3,14 @@ import { makeStyles } from "@material-ui/core";
 import variables from "styles/variables";
 import FooterButton from "./TheFooterButton";
 interface IProps {
-  navs: { title: string; icon: JSX.Element }[];
+  navs: { title: string; icon: JSX.Element; to: string }[];
 }
 export default (props: IProps) => {
   const classes = useStyles();
   return (
     <footer className={classes.footer}>
       {props.navs.map((nav, key) => (
-        <FooterButton icon={nav.icon} key={key} />
+        <FooterButton icon={nav.icon} to={nav.to} key={key} />
       ))}
     </footer>
   );

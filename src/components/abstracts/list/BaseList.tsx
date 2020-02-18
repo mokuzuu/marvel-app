@@ -9,7 +9,28 @@ import { truncate } from "utils/truncate";
 import variables from "styles/variables";
 import { Link } from "react-router-dom";
 import { CircularProgress } from "@material-ui/core";
+import { ScreenTypes } from "utils/screenTypes";
+import { useTabletHook } from "hooks/isTablet";
 
+const getHeightInPx = (screenType: ScreenTypes) => {
+  if (screenType === ScreenTypes.Mobile) {
+    return (
+      (
+        document.documentElement.clientHeight -
+        parseInt(variables.footer.height, 10) -
+        parseInt(variables.header.height, 10)
+      ).toString() + "px"
+    );
+  } else if (screenType === ScreenTypes.Desktop) {
+    return (
+      (
+        document.documentElement.clientHeight -
+        parseInt(variables.header.height, 10)
+      ).toString() + "px"
+    );
+  }
+  return "";
+};
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
@@ -17,19 +38,10 @@ const useStyles = makeStyles(theme => ({
     padding: 0,
     backgroundColor: theme.palette.background.paper,
     [theme.breakpoints.up("xs")]: {
-      height:
-        (
-          document.documentElement.clientHeight -
-          parseInt(variables.footer.height, 10) -
-          parseInt(variables.header.height, 10)
-        ).toString() + "px"
+      height: getHeightInPx(ScreenTypes.Mobile)
     },
     [theme.breakpoints.up("sm")]: {
-      height:
-        (
-          document.documentElement.clientHeight -
-          parseInt(variables.header.height, 10)
-        ).toString() + "px"
+      height: getHeightInPx(ScreenTypes.Desktop)
     },
     "&::-webkit-scrollbar": {
       display: "none"
@@ -58,7 +70,7 @@ export default (props: IProps) => {
   const [isListLoading, setListLoadingStatus] = React.useState(false);
   const classes = useStyles();
   const listRef = React.useRef<HTMLUListElement>(null);
-
+  const isTablet = useTabletHook();
   React.useEffect(() => {
     setListLoadingStatus(true);
     props.fetch(count).then((res: any) => {
@@ -82,6 +94,15 @@ export default (props: IProps) => {
             ) {
               setListLoadingStatus(true);
             }
+          }
+        }
+      });
+      window.addEventListener("resize", () => {
+        if (listRef.current) {
+          if (isTablet) {
+            listRef.current.style.height = getHeightInPx(ScreenTypes.Mobile);
+          } else {
+            listRef.current.style.height = getHeightInPx(ScreenTypes.Desktop);
           }
         }
       });

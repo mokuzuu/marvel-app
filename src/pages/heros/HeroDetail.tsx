@@ -18,25 +18,36 @@ import variables from "styles/variables";
 import { getCharacterById } from "apis/characters";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useTabletHook } from "hooks/isTablet";
+import { ScreenTypes } from "utils/screenTypes";
+
+const getHeightInPx = (screenType: ScreenTypes) => {
+  if (screenType === ScreenTypes.Mobile) {
+    return (
+      (
+        document.documentElement.clientHeight -
+        parseInt(variables.footer.height, 10) -
+        parseInt(variables.header.height, 10)
+      ).toString() + "px"
+    );
+  } else if (screenType === ScreenTypes.Desktop) {
+    return (
+      (
+        document.documentElement.clientHeight -
+        parseInt(variables.header.height, 10)
+      ).toString() + "px"
+    );
+  }
+};
 
 interface IProps {}
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
     [theme.breakpoints.up("xs")]: {
-      height:
-        (
-          document.documentElement.clientHeight -
-          parseInt(variables.footer.height, 10) -
-          parseInt(variables.header.height, 10)
-        ).toString() + "px"
+      height: getHeightInPx(ScreenTypes.Mobile)
     },
     [theme.breakpoints.up("sm")]: {
-      height:
-        (
-          document.documentElement.clientHeight -
-          parseInt(variables.header.height, 10)
-        ).toString() + "px"
+      height: getHeightInPx(ScreenTypes.Desktop)
     },
     overflow: "scroll",
     "&::-webkit-scrollbar": {
@@ -46,6 +57,9 @@ const useStyles = makeStyles(theme => ({
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular
+  },
+  container: {
+    marginTop: "3%"
   }
 }));
 export default (props: IProps) => {
@@ -78,14 +92,16 @@ export default (props: IProps) => {
         .catch(err => console.error(err));
     }
   }, [id]);
-  console.log(isDetailLoading);
+
   return (
     <Container className={classes.root}>
       {isDetailLoading ? (
-        <CircularProgress color="secondary" />
+        <Grid container justify="center">
+          <CircularProgress color="secondary" />
+        </Grid>
       ) : (
         selectedCharacter !== null && (
-          <Grid container spacing={3}>
+          <Grid container spacing={3} className={classes.container}>
             {isTablet ? (
               <React.Fragment>
                 <Grid item xs={12}>
@@ -94,7 +110,7 @@ export default (props: IProps) => {
                     {selectedCharacter.description}
                   </Typography>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} justify="center" container>
                   <img
                     src={selectedCharacter.thumbnail}
                     width="300"
