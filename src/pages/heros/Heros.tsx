@@ -108,7 +108,7 @@ const useStyles = makeStyles(theme => ({
   listWrapper: {
     flex: "1",
     [theme.breakpoints.up("sm")]: {
-      borderRight: "0.5px solid grey"
+      borderRight: "1px solid grey"
     }
   },
   detailWrapper: {
