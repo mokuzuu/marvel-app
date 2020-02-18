@@ -85,6 +85,15 @@ export default (props: IProps) => {
 
   React.useEffect(() => {
     if (listRef.current) {
+      const attachEvent = () => {
+        if (listRef.current) {
+          if (isTablet) {
+            listRef.current.style.height = getHeightInPx(ScreenTypes.Mobile);
+          } else {
+            listRef.current.style.height = getHeightInPx(ScreenTypes.Desktop);
+          }
+        }
+      };
       listRef.current.addEventListener("scroll", () => {
         if (listRef.current) {
           if (!isListLoading) {
@@ -97,15 +106,8 @@ export default (props: IProps) => {
           }
         }
       });
-      window.addEventListener("resize", () => {
-        if (listRef.current) {
-          if (isTablet) {
-            listRef.current.style.height = getHeightInPx(ScreenTypes.Mobile);
-          } else {
-            listRef.current.style.height = getHeightInPx(ScreenTypes.Desktop);
-          }
-        }
-      });
+      window.addEventListener("resize", attachEvent);
+      return window.removeEventListener("resize", attachEvent);
     }
   }, [listRef]);
 
