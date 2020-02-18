@@ -8,7 +8,6 @@ const initialState = {
 const appReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case UPDATE_ROUTE_NAME:
-      console.log(action);
       return {
         ...state,
         routeName: action.name

@@ -5,8 +5,7 @@ import {
   Route,
   useRouteMatch,
   Switch,
-  RouteComponentProps,
-  withRouter
+  RouteComponentProps
 } from "react-router-dom";
 import { makeStyles } from "@material-ui/core";
 import { useTabletHook } from "hooks/isTablet";
@@ -77,7 +76,6 @@ export default connect(
       });
     };
     React.useEffect(() => {
-      console.log(props.updateRouteName);
       props.updateRouteName("Hero List");
     }, []);
     return (

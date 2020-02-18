@@ -1,7 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
 import variables from "styles/variables";
-import ListAltIcon from "@material-ui/icons/ListAlt";
 import { Link } from "react-router-dom";
 interface IProps {
   icon: JSX.Element;

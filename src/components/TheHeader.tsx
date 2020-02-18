@@ -8,8 +8,7 @@ import { rootPages } from "App";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 
-const mapStateToProps = (state: any /*, ownProps*/) => {
-  console.log(state);
+const mapStateToProps = (state: any) => {
   return {
     routeName: state.app.routeName
   };
