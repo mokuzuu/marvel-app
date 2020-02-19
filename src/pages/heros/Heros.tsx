@@ -12,6 +12,7 @@ import { useTabletHook } from "hooks/isTablet";
 import HeroDetail from "./HeroDetail";
 import { connect } from "react-redux";
 import { UPDATE_ROUTE_NAME } from "store/index";
+import { withRouter } from "react-router-dom"
 const mapDispatchToProps = (dispatch: Function) => {
   return {
     updateRouteName: (name: string) =>
